@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   bool _withSuggesttions = false;
   int _count = 0;
   int _column = 8;
-  double _fontSize = 14;
+  double _fontSize = 22;
 
   String _selectableOnPressed = '';
   String _inputOnPressed = '';
@@ -99,21 +99,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
     _inputTags.addAll(
         [
-          'first tag',
-          'android world',
-          'pic',
-          '美术',
-          'substring',
-          'last tag',
-          '术',
-          'enable',
-          'act',
-          '1',
-          '上上下下左右左右',
-          'first',
-          'return',
-          'lollipop',
-          'loop',
+          'first tag'
         ]
     );
 
@@ -129,9 +115,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           headerSliverBuilder: (BuildContext context,bool boxIsScrolled){
             return <Widget>[
               SliverAppBar(
-                title: Text("flutter_tags - Test"),
+                title: Text("Repo"),
                 centerTitle: true,
                 pinned: true,
+                backgroundColor: Colors.purple,
                 expandedHeight: 110.0,
                 floating: true,
                 forceElevated: boxIsScrolled,
@@ -141,90 +128,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           body:
           ListView(
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        child: Row(
-                          children: <Widget>[
-                            Checkbox(
-                                value: _symmetry,
-                                onChanged: (a){
-                                  setState(() {
-                                    _symmetry = !_symmetry;
-                                  });
-                                }
-                            ),
-                            Text('Symmetry')
-                          ],
-                        ),
-                        onTap: (){
-                          setState(() {
-                            _symmetry = !_symmetry;
-                          });
-                        },
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(20),
-                      ),
-                      DropdownButton(
-                        hint: Text(_column.toString()),
-                        items: _buildItems(),
-                        onChanged: (a) {
-                          setState(() {
-                            _column = a;
-                          });
-                        },
-                      ),
-                      Text("Columns")
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        child: Row(
-                          children: <Widget>[
-                            Checkbox(
-                                value: _withSuggesttions,
-                                onChanged: (a){
-                                  setState(() {
-                                    _withSuggesttions = !_withSuggesttions;
-                                  });
-                                }
-                            ),
-                            Text('With suggestions')
-                          ],
-                        ),
-                        onTap: (){
-                          setState(() {
-                            _withSuggesttions = !_withSuggesttions;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Text('Font Size'),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Slider(
-                            value: _fontSize,
-                            min: 6,
-                            max: 30,
-                            onChanged: (a){
-                              setState(() {
-                                _fontSize = (a.round()).toDouble();
-                              });
-                            },
-                          ),
-                          Text(_fontSize.toString()),
-                        ],
-                      ),
-                    ],
-                  ),
                   Padding(
                     padding: EdgeInsets.all(10),
                   ),
@@ -235,9 +138,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                       columns: _column,
                       fontSize: _fontSize,
                       symmetry: _symmetry,
-                      iconBackground: Colors.green[800],
-                      lowerCase: true,
+                      color: Colors.deepPurpleAccent,
+                      iconBackground: Colors.deepPurpleAccent,
+                      lowerCase: false,
                       autofocus: false,
+                      placeholder: "Add tags",
+
                       suggestionsList: !_withSuggesttions ? null :
                       [
                         "One",
@@ -255,12 +161,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                         "last",
                         "lest"
                       ],
+
                       popupMenuBuilder: (String tag){
                         return <PopupMenuEntry>[
                           PopupMenuItem(
                             child: Text(tag,
                               style: TextStyle(
-                                  color: Colors.black87,fontWeight: FontWeight.w800
+                                  color: _randomColor(),fontWeight: FontWeight.w800
                               ),
                             ),
                             enabled: false,
@@ -316,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: RaisedButton(
-                        child: Text('Print all Tags'),
+                        child: Text('Analyse'),
                         onPressed: (){
                           _inputOnPressed ='';
                           _inputTags.forEach((tag) =>
@@ -337,20 +244,24 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     );
   }
 
+
+
+
   ///Random Colors
   Color _color = Color(0xFFFFFFFF);
   final Random _random = Random();
 
-  void _randomColors()
+  Color _randomColor()
   {
-    setState(() {
+
       _color = Color.fromARGB(
         _random.nextInt(256),
         _random.nextInt(256),
         _random.nextInt(256),
-        _random.nextInt(256),
-      );
-    });
+        _random.nextInt(256));
+
+    return _color;
+
   }
 
   List<DropdownMenuItem> _buildItems()
