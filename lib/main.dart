@@ -64,7 +64,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   String _selectableOnPressed = '';
   String _inputOnPressed = '';
 
-  List<Tag> _selectableTags = [];
   List<String> _inputTags = [];
 
   List _icon=[
@@ -78,42 +77,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   void initState()
   {
     super.initState();
-    _tabController = TabController(length: 1, vsync: this);
+
     _scrollViewController = ScrollController();
-
-    int cnt = 0;
-    _list.forEach((item)
-    {
-      _selectableTags.add (
-          Tag (id: cnt.toString(),
-              title: item,
-              active: (_singleItem) ? ( cnt==3 ? true:false ) : true,
-              icon: (item == '0' || item == '1' || item == '2') ?
-              _icon[ int.parse (item
-              ) ] : null
-          )
-      );
-      cnt++;
-    }
-    );
-
     _inputTags.addAll(
         [
-          'first tag',
-          'android world',
-          'pic',
-          '美术',
-          'substring',
-          'last tag',
-          '术',
-          'enable',
-          'act',
-          '1',
-          '上上下下左右左右',
-          'first',
-          'return',
-          'lollipop',
-          'loop',
+          'exampleTag'
         ]
     );
 
