@@ -13,11 +13,22 @@ import 'package:http/http.dart' as http;
 
 class DataSearch {
 
-  Future<String> getTweeterData(List<String> keywords) async{
+  static Future<String> getTweeterData(List<String> keywords) async{
     String apiKey = "IKIIecQL9sr0VUwhMVHE9Db9h ";
     String accessToken = '1142537491192406016-EWGBLYGD6sTf57fNBt984Y1anood0M';
     String env = "Prod";
 
+
+    final url = "https://api.twitter.com/1.1/tweets/search/30day/$env.json";
+    final auth = {
+      'authorization' : 'Bearer $accessToken',
+      'content-type' : 'application/json'
+    };
+
+
+    final request = await http.post(url,headers : auth);
+
+    return request.body;
 
   }
 
