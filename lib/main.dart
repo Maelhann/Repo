@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags/input_tags.dart';
 import 'package:flutter_tags/selectable_tags.dart';
 import 'package:flutter/services.dart';
+import 'package:repo/data_fetch.dart';
 import 'dart:math';
 
 
@@ -18,12 +19,12 @@ class MyApp extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Repo',
       theme: ThemeData(
 
         primarySwatch: Colors.blueGrey,
       ),
-      home: MyHomePage(title: 'flutter_tags - Test'),
+      home: MyHomePage(title: 'Welcome to Repo'),
     );
   }
 }
@@ -225,12 +226,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     child: RaisedButton(
                         child: Text('Analyse'),
                         onPressed: (){
-                          _inputOnPressed ='';
-                          _inputTags.forEach((tag) =>
-                              setState(() {
-                                _inputOnPressed+='${tag},\n';
-                              })
-                          );
+
+                          DataSearch.getTweeterData(_inputTags);
+//                          _inputOnPressed ='';
+//                          _inputTags.forEach((tag) =>
+//                              setState(() {
+//                                _inputOnPressed+='${tag},\n';
+//                              })
+//                          );
                         }
                     ),
                   ),
