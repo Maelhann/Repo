@@ -33,13 +33,15 @@ class DataSearch {
     print(session.token);
 
 
-//    final url = "https://api.twitter.com/1.1/tweets/search/30day/$env.json";
-//    final auth = {
-//      'Authorization' : 'Bearer ${session.token}',
-//      'content-Type' : 'application/json'
-//    };
-//
-//
+    final url = "https://api.twitter.com/1.1/tweets/search/30day/$env.json";
+    final auth = {
+      'authorization' : 'Bearer ${session.token}',
+      'content-type' : 'application/json'
+    };
+
+    print( "Le retour :" +  auth['authorization']);
+
+
 //    final request = await http.post(url,headers : auth);
     //print(request.body);
     return session.token;
