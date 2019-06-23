@@ -17,15 +17,15 @@ import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 class DataSearch {
 
   static Future<String> getTweeterData(List<String> keywords) async{
-    String apiKey = "IKIIecQL9sr0VUwhMVHE9Db9h";
-    String secApiKey = "l2EwmYc79GRXInONYN3papcykFLLMHwiQCLNDekeOa22V6QksJ";
 
-    String accessToken = '1142537491192406016-EWGBLYGD6sTf57fNBt984Y1anood0M';
+    //environemnt token
     String env = "Prod";
-    
+
+
     final TwitterLogin twitterLogin
-    = new TwitterLogin(consumerKey: 'IKIIecQL9sr0VUwhMVHE9Db9h'
-        , consumerSecret: 'l2EwmYc79GRXInONYN3papcykFLLMHwiQCLNDekeOa22V6QksJ');
+    = new TwitterLogin(consumerKey: '0pR95zNMmWqUqttDPFLtThqsY'
+        , consumerSecret: 'X35wuI0KYFoaMxl6opXrqc68NBKQ8eZjzVEyFANWbvTG1EdwoI');
+
 
     final twitterResponse = await twitterLogin.authorize();
 
@@ -35,8 +35,8 @@ class DataSearch {
 
     final url = "https://api.twitter.com/1.1/tweets/search/30day/$env.json";
     final auth = {
-      'authorization' : 'Bearer ${session.token}',
-      'content-type' : 'application/json'
+      HttpHeaders.authorizationHeader : 'Bearer ${session.token}',
+     HttpHeaders.contentTypeHeader : 'application/json'
     };
 
     final data = {
@@ -46,13 +46,13 @@ class DataSearch {
       "toDate":"<YYYYMMDDHHmm>"
     };
 
-
+    var jsonBody  = json.encode(data);
     print( "Le retour :" +  auth['authorization']);
 
 
 
 
-    final request = await http.post(url,headers : auth, body:data);
+    final request = await http.post(url,headers : auth, body:jsonBody);
     print(request.body);
     return session.token;
 
