@@ -12,6 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 
 
+
+
 class DataSearch {
 
   static Future<String> getTweeterData(List<String> keywords) async{
@@ -25,36 +27,22 @@ class DataSearch {
     = new TwitterLogin(consumerKey: 'IKIIecQL9sr0VUwhMVHE9Db9h'
         , consumerSecret: 'l2EwmYc79GRXInONYN3papcykFLLMHwiQCLNDekeOa22V6QksJ');
 
-
     final twitterResponse = await twitterLogin.authorize();
 
-    print(twitterResponse.status.toString());
-
-    return twitterResponse.toString();
-
-//    curl -u 'API key:API secret key' \
-//    --data 'grant_type=client_credentials' \
-//    'https://api.twitter.com/oauth2/token'
-//
-//    final tokenAccess = {
-//      'Authorization':  '$apiKey:$secApiKey'
-//    };
-//    final getBearerToken = await http.post( 'https://api.twitter.com/oauth2/token',
-//      headers: tokenAccess,body:'grant_type=client_credentials');
-//
-//    print( getBearerToken.body );
+    final session =  await twitterLogin.currentSession;
+    print(session.token);
 
 
 //    final url = "https://api.twitter.com/1.1/tweets/search/30day/$env.json";
 //    final auth = {
-//      'authorization' : 'Bearer $accessToken',
-//      'content-type' : 'application/json'
+//      'Authorization' : 'Bearer ${session.token}',
+//      'content-Type' : 'application/json'
 //    };
 //
 //
 //    final request = await http.post(url,headers : auth);
-//    print(request.body);
-//    return request.body;
+    //print(request.body);
+    return session.token;
 
   }
 
