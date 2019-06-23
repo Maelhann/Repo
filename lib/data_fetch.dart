@@ -39,11 +39,21 @@ class DataSearch {
       'content-type' : 'application/json'
     };
 
+    final data = {
+      "query":"from:TwitterDev lang:en",
+      "maxResults": "100",
+      "fromDate":"<YYYYMMDDHHmm>",
+      "toDate":"<YYYYMMDDHHmm>"
+    };
+
+
     print( "Le retour :" +  auth['authorization']);
 
 
-//    final request = await http.post(url,headers : auth);
-    //print(request.body);
+
+
+    final request = await http.post(url,headers : auth, body:data);
+    print(request.body);
     return session.token;
 
   }
