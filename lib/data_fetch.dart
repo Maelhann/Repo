@@ -20,8 +20,17 @@ class DataSearch {
 
     String accessToken = '1142537491192406016-EWGBLYGD6sTf57fNBt984Y1anood0M';
     String env = "Prod";
+    
+    final TwitterLogin twitterLogin
+    = new TwitterLogin(consumerKey: 'IKIIecQL9sr0VUwhMVHE9Db9h'
+        , consumerSecret: 'l2EwmYc79GRXInONYN3papcykFLLMHwiQCLNDekeOa22V6QksJ');
 
 
+    final twitterResponse = await twitterLogin.authorize();
+
+    print(twitterResponse.status.toString());
+
+    return twitterResponse.toString();
 
 //    curl -u 'API key:API secret key' \
 //    --data 'grant_type=client_credentials' \
