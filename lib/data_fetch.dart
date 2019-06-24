@@ -30,12 +30,15 @@ class DataSearch {
     final twitterResponse = await twitterLogin.authorize();
 
     final session =  await twitterLogin.currentSession;
-    print(session.token);
+
+    var token = session.token;
+    var bytes = utf8.encode(token);
+    var base64token = base64.encode(bytes);
 
 
     final url = "https://api.twitter.com/1.1/tweets/search/30day/$env.json";
     final auth = {
-      HttpHeaders.authorizationHeader : 'Bearer ${session.token}',
+      HttpHeaders.authorizationHeader : 'Bearer $base64token',
      HttpHeaders.contentTypeHeader : 'application/json'
     };
 
@@ -58,9 +61,16 @@ class DataSearch {
 
   }
 
-  Future<String> getNewsData(List<String> keywords) async{
+  static Future<String> getNewsData(List<String> keywords) async{
     // api key c83a25050dc54eada0e9c6fff9f2ff44
-    // use curl as always.
+    // use curl as always.https://newsapi.org/v2/everything
+      final String key = 'c83a25050dc54eada0e9c6fff9f2ff44'; 
+      final String url = 'https://newsapi.org/v2/everything';
+
+      final request = await http.post(url,body: 'apiKey=c83a25050dc54eada0e9c6fff9f2ff44');
+      print(request.toString().length);
+      return request.toString();
+
   }
 
 }
