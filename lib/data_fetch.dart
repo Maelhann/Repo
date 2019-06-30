@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags/input_tags.dart';
 import 'package:flutter_tags/selectable_tags.dart';
 import 'package:flutter/services.dart';
-import 'dart:math';
 import 'dart:async';
 import 'dart:io';
 import 'dart:core';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
+import 'package:repo/newsJson.dart';
 
 
 
@@ -61,16 +61,25 @@ class DataSearch {
 
   }
 
-  static Future<String> getNewsData(List<String> keywords) async{
-    // api key c83a25050dc54eada0e9c6fff9f2ff44
-    // use curl as always.https://newsapi.org/v2/everything
+  static Future<List<Article>> getNewsData(List<String> keywords) async{
       final String key = 'c83a25050dc54eada0e9c6fff9f2ff44'; 
       final String url = 'https://newsapi.org/v2/everything';
 
-      final request = await http.post(url,body: 'apiKey=c83a25050dc54eada0e9c6fff9f2ff44');
-      print(request.toString().length);
-      return request.toString();
+      final headers = {
+        "x-api-key": '$key'
+      };
 
+      final request = await http.post(url,headers: headers,body: 'apiKey=c83a25050dc54eada0e9c6fff9f2ff44');
+      final jsonQuery = request.body ;
+      final articles = json.decode(jsonQuery);
+
+      List<Article> articleList = new List<Article>();
+      for(dynamic article in articles['articles']){
+       Article curr = Article.articleFromJson(article);
+       articleList.add(curr);
+       }
+
+      return articleList;
   }
 
 }
