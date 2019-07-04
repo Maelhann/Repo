@@ -227,7 +227,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                         child: Text('Analyse'),
                         onPressed: (){
 
-                          DataSearch.getNewsData(_inputTags);
+                          DataSearch.analyzeArticles(_inputTags);
 //                          _inputOnPressed ='';
 //                          _inputTags.forEach((tag) =>
 //                              setState(() {

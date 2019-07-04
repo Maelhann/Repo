@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/input_tags.dart';
 import 'package:flutter_tags/selectable_tags.dart';
@@ -10,76 +9,111 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:repo/newsJson.dart';
-
-
+import 'package:repo/sentAnalysis.dart';
 
 
 class DataSearch {
 
-  static Future<String> getTweeterData(List<String> keywords) async{
 
+  static Future<EmotionalAnalysis> analyse(String body) async {
+    final String userPass =
+        "apikey:7WAbN9QUhcR8QlNjbI7N3N4jWonTh1nRF59gx2cv-sjU";
+    final String args = '/v3/tone?version=2017-09-21&text=';
+    final String bodyUri = Uri.encodeFull(body);
+    final String url =
+        'https://$userPass@gateway-lon.watsonplatform.net/tone-analyzer/api$args$bodyUri';
+
+    final response = await http.get(url);
+    final responseJson = json.decode(response.body); // different body
+
+    print('\n\n');
+
+    EmotionalAnalysis analysis = EmotionalAnalysis.fromJson(responseJson);
+    return analysis;
+  }
+
+
+
+  static Future<String> getTweeterData(List<String> keywords) async {
     //environemnt token
     String env = "Prod";
 
-
-    final TwitterLogin twitterLogin
-    = new TwitterLogin(consumerKey: '0pR95zNMmWqUqttDPFLtThqsY'
-        , consumerSecret: 'X35wuI0KYFoaMxl6opXrqc68NBKQ8eZjzVEyFANWbvTG1EdwoI');
-
+    final TwitterLogin twitterLogin = new TwitterLogin(
+        consumerKey: '0pR95zNMmWqUqttDPFLtThqsY',
+        consumerSecret: 'X35wuI0KYFoaMxl6opXrqc68NBKQ8eZjzVEyFANWbvTG1EdwoI');
 
     final twitterResponse = await twitterLogin.authorize();
 
-    final session =  await twitterLogin.currentSession;
+    final session = await twitterLogin.currentSession;
 
     var token = session.token;
     var bytes = utf8.encode(token);
     var base64token = base64.encode(bytes);
 
-
     final url = "https://api.twitter.com/1.1/tweets/search/30day/$env.json";
     final auth = {
-      HttpHeaders.authorizationHeader : 'Bearer $base64token',
-     HttpHeaders.contentTypeHeader : 'application/json'
+      HttpHeaders.authorizationHeader: 'Bearer $base64token',
+      HttpHeaders.contentTypeHeader: 'application/json'
     };
 
     final data = {
-      "query":"from:TwitterDev lang:en",
+      "query": "from:TwitterDev lang:en",
       "maxResults": "100",
-      "fromDate":"<YYYYMMDDHHmm>",
-      "toDate":"<YYYYMMDDHHmm>"
+      "fromDate": "<YYYYMMDDHHmm>",
+      "toDate": "<YYYYMMDDHHmm>"
     };
 
-    var jsonBody  = json.encode(data);
-    print( "Le retour :" +  auth['authorization']);
+    var jsonBody = json.encode(data);
+    print("Le retour :" + auth['authorization']);
 
-
-
-
-    final request = await http.post(url,headers : auth, body:jsonBody);
+    final request = await http.post(url, headers: auth, body: jsonBody);
     print(request.body);
     return session.token;
-
   }
 
-  static Future<List<Article>> getNewsData(List<String> keywords) async{
-      final String key = 'c83a25050dc54eada0e9c6fff9f2ff44'; 
-      final String url = 'https://newsapi.org/v2/everything';
 
-      final headers = {
-        "x-api-key": '$key'
-      };
+  static Future<List<Article>> getNewsData(List<String> keywords) async {
+    final String key = 'c83a25050dc54eada0e9c6fff9f2ff44';
+    String bodyUri = '${keywords[0]}';
 
-      final request = await http.post(url,headers: headers,body: 'apiKey=c83a25050dc54eada0e9c6fff9f2ff44');
-      final jsonQuery = request.body ;
-      final articles = json.decode(jsonQuery);
+    for(String s in keywords){
+      bodyUri += "+$s";
+    }
+    final String url = ('https://newsapi.org/v2/everything?q=$bodyUri');
 
-      List<Article> articleList = new List<Article>();
-      for(dynamic article in articles['articles']){
-       Article curr = Article.articleFromJson(article);
-       articleList.add(curr);
-       }
+    final headers = {"x-api-key": '$key'};
 
-      return articleList;
+
+
+    final request = await http.get(url, headers: headers);
+    final jsonQuery = request.body;
+    final articles = json.decode(jsonQuery);
+
+    print(jsonQuery);
+    List<Article> articleList = new List<Article>();
+
+    final allArticlesJson = articles['articles'] as List;
+
+    for (dynamic article in allArticlesJson) {
+      Article curr = Article.articleFromJson(article);
+      articleList.add(curr);
+    }
+
+    return articleList;
   }
+
+
+  static Future<List<Article>> analyzeArticles(List<String> keywords) async {
+    List<Article> articlesToAnalyze = await getNewsData(keywords);
+
+    for(Article a in articlesToAnalyze){
+      a.setAnalysis();  // sets the emotional analysis of each article
+    }
+    return articlesToAnalyze;
+  }
+
+  // we now have articles as a list of objects
+  // each with their own emotional analysis. La chance !!
+
 
 }

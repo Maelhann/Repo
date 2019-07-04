@@ -1,3 +1,5 @@
+import 'package:repo/sentAnalysis.dart';
+import 'package:repo/data_fetch.dart';
 
 class Article {
   final String content;
@@ -6,25 +8,28 @@ class Article {
   final dynamic source;
   final String title;
   final String author;
+  EmotionSet analysis = null;
 
   Article(this.content, this.dateTime, this.snippet, this.source, this.title,
       this.author);
 
-
-  static Article articleFromJson(Map<String,dynamic> articleData){
+  static Article articleFromJson(Map<String, dynamic> articleData){
     String content = articleData['content'];
-
     String date = articleData['publishedAt'];
-
     String snippet = articleData['description'];
-
     dynamic source = articleData['source'];
-
     String title = articleData['title'];
-
     String author = articleData['author'];
-    return new Article(content,date,snippet,source,title,author);
+    return new Article(content, date, snippet, source, title, author);
   }
 
+  void setAnalysis() async {
+    final ea = await DataSearch.analyse(content);
+    this.analysis = EmotionSet.fromAnalysis(ea);
+  }
+
+
+
 }
+
 
