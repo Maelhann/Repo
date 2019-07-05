@@ -37,7 +37,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollViewController;
   bool toggle = false;
@@ -49,7 +49,6 @@ class _MyHomePageState extends State<MyHomePage>
     Colors.yellow,
     Colors.purple,
     Colors.deepOrangeAccent
-
   ];
 
   Map<String, double> dataMap = new Map();
@@ -87,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage>
     '篝火营地',
   ];
 
+  // TAG VARIABLES
   bool _symmetry = false;
   bool _singleItem = false;
   bool _withSuggesttions = false;
@@ -96,11 +96,28 @@ class _MyHomePageState extends State<MyHomePage>
 
   String _selectableOnPressed = '';
   String _inputOnPressed = '';
-
   List<Tag> _selectableTags = [];
   List<String> _inputTags = [];
 
+  // NUMBER OF RESULTS
+  Animation<double> animation;
+  AnimationController _controller;
+  String numRes;
+
   List _icon = [Icons.home, Icons.language, Icons.headset];
+
+  void initCounter(num totalNumber) {
+    _controller =
+        AnimationController(duration: const Duration(seconds: 10), vsync: this);
+    animation = Tween<double>(begin: 0, end: totalNumber.toDouble()).animate(_controller)
+      ..addListener(() {
+        setState(() {
+          // The state that has changed here is the animation objects value
+          numRes = animation.value.toStringAsFixed(0);
+        });
+      });
+    _controller.forward();
+  }
 
   @override
   void initState() {
@@ -123,11 +140,11 @@ class _MyHomePageState extends State<MyHomePage>
     _inputTags.addAll(['first tag']);
   }
 
-  void togglePieChart(List<Article> articles) async{
-    dataMap  = new Map();
+  void togglePieChart(List<Article> articles) async {
+    dataMap = new Map();
     String _corpus = "";
-    for(Article a in articles){
-        _corpus += "${a.snippet}";
+    for (Article a in articles) {
+      _corpus += "${a.snippet}";
     }
 
     final emotional_anal = await DataSearch.analyse(_corpus);
@@ -136,19 +153,20 @@ class _MyHomePageState extends State<MyHomePage>
     dataMap.putIfAbsent('joy', () => analysis.joy.intensity);
     dataMap.putIfAbsent('anger', () => analysis.anger.intensity);
     dataMap.putIfAbsent('tentativeness', () => analysis.tentative.intensity);
-    dataMap.putIfAbsent('sadness', () =>analysis.sadness.intensity);
-    dataMap.putIfAbsent('confidence', () =>analysis.confident.intensity);
-    dataMap.putIfAbsent('fear', () =>analysis.fear.intensity);
+    dataMap.putIfAbsent('sadness', () => analysis.sadness.intensity);
+    dataMap.putIfAbsent('confidence', () => analysis.confident.intensity);
+    dataMap.putIfAbsent('fear', () => analysis.fear.intensity);
 
 
     setState(() {
-      if(!toggle){
+      if (!toggle) {
         toggle = !toggle;
       }
-      });
+    });
+    initCounter(DataSearch.numRes);
   }
 
-  void processEmotions(var key, var value){
+  void processEmotions(var key, var value) {
     print("$value" + '$key');
     dataMap.putIfAbsent(key, () => value);
   }
@@ -298,8 +316,18 @@ class _MyHomePageState extends State<MyHomePage>
                     colorList: colorList,
                     showLegends: true,
                   )
-                : Text("Show analysis of keywords here"),
-          ))
+                : Text("Repo checks thousands of news outlets and analyzes what"
+                "the public opinion of your tags.",textAlign: TextAlign.center ),
+          )),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              'number of sources analyzed : $numRes',
+              textDirection: TextDirection.rtl,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          )
         ],
       ),
     ));
@@ -312,23 +340,7 @@ class _MyHomePageState extends State<MyHomePage>
   Color _randomColor() {
     _color = Color.fromARGB(_random.nextInt(256), _random.nextInt(256),
         _random.nextInt(256), _random.nextInt(256));
-
     return _color;
   }
 
-  List<DropdownMenuItem> _buildItems() {
-    List<DropdownMenuItem> list = [];
-
-    int count = 19;
-
-    for (int i = 1; i < count; i++)
-      list.add(
-        DropdownMenuItem(
-          child: Text(i.toString()),
-          value: i,
-        ),
-      );
-
-    return list;
-  }
 }

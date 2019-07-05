@@ -13,7 +13,7 @@ import 'package:repo/sentAnalysis.dart';
 
 
 class DataSearch {
-
+  static num numRes = 0;
 
   static Future<EmotionalAnalysis> analyse(String body) async {
     final String userPass =
@@ -95,7 +95,7 @@ class DataSearch {
 
 
     final allArticlesJson = articles['articles'] as List;
-
+    numRes = articles['totalResults'];
 
     for (dynamic article in allArticlesJson) {
       Article curr = Article.articleFromJson(article);
