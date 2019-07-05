@@ -211,7 +211,8 @@ class EmotionalAnalysis {
 
   factory EmotionalAnalysis.fromJson(Map<String, dynamic> json) {
     var docTonesJson = json['document_tone'];
-
+    print("LOOK HERE");
+    print('$docTonesJson');
     var tempDocTone = DocumentTone.fromJson(docTonesJson);
 
     var sentencesTonesJson = json['sentences_tone'] as List;
@@ -237,6 +238,9 @@ class DocumentTone {
   DocumentTone({this.tones});
 
   factory DocumentTone.fromJson(Map<String, dynamic> json) {
+    if(json == null){
+      return null ;
+    }
     var tonesJson = json['tones'] as List;
 
     List<IndividualTone> tempTones = tonesJson

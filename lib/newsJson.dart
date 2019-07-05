@@ -25,7 +25,9 @@ class Article {
 
   void setAnalysis() async {
     final ea = await DataSearch.analyse(content);
+    if (ea.docTone != null){
     this.analysis = EmotionSet.fromAnalysis(ea);
+    }
   }
 
 
