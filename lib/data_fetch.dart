@@ -17,7 +17,7 @@ class DataSearch {
 
   static Future<EmotionalAnalysis> analyse(String body) async {
     final String userPass =
-        "apikey:7WAbN9QUhcR8QlNjbI7N3N4jWonTh1nRF59gx2cv-sjU";
+        "apikey:X0CnXwe429eh-ZgHkiduRutrd3DjP3x0kFH9qVovE4ze";
     final String args = '/v3/tone?version=2017-09-21&text=';
     final String bodyUri = Uri.encodeFull(body);
     final String url =
@@ -102,32 +102,10 @@ class DataSearch {
       articleList.add(curr);
     }
 
-//
-//    final Article articleTest = articleList[0];
-//    print(articleTest.content);
-//    print('-- SNIPPET --');
-//    print(articleTest.snippet);
-//    print('-- TITLE --');
-//    print(articleTest.title);
-//    print('-- AUTHOR --');
-//    print(articleTest.author);
-//    print('-- TITLE -- ');
-//    print(articleTest.title);
-
 
     return articleList;
   }
 
-
-  static Future<List<Article>> analyzeArticles(List<String> keywords) async {
-    List<Article> articlesToAnalyze = await getNewsData(keywords);
-
-    for(Article a in articlesToAnalyze){
-      a.setAnalysis();  // sets the emotional analysis of each article
-    }
-
-    return articlesToAnalyze;
-  }
 
   // we now have articles as a list of objects
   // each with their own emotional analysis. La chance !!

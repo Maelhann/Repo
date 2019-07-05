@@ -10,6 +10,7 @@ import 'package:repo/data_fetch.dart';
 import 'package:repo/newsJson.dart';
 import 'dart:math';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:repo/sentAnalysis.dart';
 
 void main() => runApp(MyApp());
 
@@ -46,6 +47,9 @@ class _MyHomePageState extends State<MyHomePage>
     Colors.green,
     Colors.blue,
     Colors.yellow,
+    Colors.purple,
+    Colors.deepOrangeAccent
+
   ];
 
   Map<String, double> dataMap = new Map();
@@ -119,36 +123,25 @@ class _MyHomePageState extends State<MyHomePage>
     _inputTags.addAll(['first tag']);
   }
 
-  void togglePieChart(List<Article> articles) {
-    Map<String, double> data = {
-      'joy': 0,
-      'tentative': 0,
-      'fear': 0,
-      'anger': 0,
-      'confident': 0,
-      'sadness': 0
-    };
-
-    for (Article a in articles) {
-      if (a.analysis != null) {
-        data['joy'] += a.analysis.joy.intensity;
-        data['anger'] += a.analysis.anger.intensity;
-        data['confident'] += a.analysis.confident.intensity;
-        data['fear'] += a.analysis.fear.intensity;
-        data['tentative'] += a.analysis.tentative.intensity;
-        data['sadness'] += a.analysis.sadness.intensity;
-      }
+  void togglePieChart(List<Article> articles) async{
+    dataMap  = new Map();
+    String _corpus = "";
+    for(Article a in articles){
+        _corpus += "${a.snippet}";
     }
 
+    final emotional_anal = await DataSearch.analyse(_corpus);
+    final analysis = EmotionSet.fromAnalysis(emotional_anal);
 
-    data.forEach(processEmotions);
-    print("here");
+    dataMap.putIfAbsent('joy', () => analysis.joy.intensity);
+    dataMap.putIfAbsent('anger', () => analysis.anger.intensity);
       setState(() {
         toggle = !toggle;
       });
   }
 
   void processEmotions(var key, var value){
+    print("$value" + '$key');
     dataMap.putIfAbsent(key, () => value);
   }
 
@@ -271,7 +264,7 @@ class _MyHomePageState extends State<MyHomePage>
             child: RaisedButton(
                 child: Text('Analyse'),
                 onPressed: () async {
-                  final data = await DataSearch.analyzeArticles(_inputTags);
+                  final data = await DataSearch.getNewsData(_inputTags);
                   togglePieChart(data);
                 }),
           ),

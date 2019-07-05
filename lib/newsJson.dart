@@ -23,12 +23,6 @@ class Article {
     return new Article(content, date, snippet, source, title, author);
   }
 
-  void setAnalysis() async {
-    final ea = await DataSearch.analyse(content);
-    if (ea.docTone != null){
-    this.analysis = EmotionSet.fromAnalysis(ea);
-    }
-  }
 
 
 
