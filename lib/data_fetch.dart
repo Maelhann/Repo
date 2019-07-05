@@ -126,7 +126,6 @@ class DataSearch {
       a.setAnalysis();  // sets the emotional analysis of each article
     }
 
-    print("HEHEHEHEH");
     return articlesToAnalyze;
   }
 
