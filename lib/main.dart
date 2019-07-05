@@ -8,6 +8,7 @@ import 'package:flutter_tags/selectable_tags.dart';
 import 'package:flutter/services.dart';
 import 'package:repo/data_fetch.dart';
 import 'dart:math';
+import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 
 
 void main() => runApp(MyApp());
@@ -226,14 +227,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     child: RaisedButton(
                         child: Text('Analyse'),
                         onPressed: (){
-
                           DataSearch.analyzeArticles(_inputTags);
-//                          _inputOnPressed ='';
-//                          _inputTags.forEach((tag) =>
-//                              setState(() {
-//                                _inputOnPressed+='${tag},\n';
-//                              })
-//                          );
                         }
                     ),
                   ),
