@@ -135,8 +135,16 @@ class _MyHomePageState extends State<MyHomePage>
 
     dataMap.putIfAbsent('joy', () => analysis.joy.intensity);
     dataMap.putIfAbsent('anger', () => analysis.anger.intensity);
-      setState(() {
+    dataMap.putIfAbsent('tentativeness', () => analysis.tentative.intensity);
+    dataMap.putIfAbsent('sadness', () =>analysis.sadness.intensity);
+    dataMap.putIfAbsent('confidence', () =>analysis.confident.intensity);
+    dataMap.putIfAbsent('fear', () =>analysis.fear.intensity);
+
+
+    setState(() {
+      if(!toggle){
         toggle = !toggle;
+      }
       });
   }
 
