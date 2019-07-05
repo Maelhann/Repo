@@ -8,7 +8,7 @@ import 'package:flutter_tags/selectable_tags.dart';
 import 'package:flutter/services.dart';
 import 'package:repo/data_fetch.dart';
 import 'dart:math';
-import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 
 void main() => runApp(MyApp());
@@ -45,6 +45,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 {
   TabController _tabController;
   ScrollController _scrollViewController;
+  bool toggle = false;
+
+  List<Color> colorList = [
+    Colors.red,
+    Colors.green,
+    Colors.blue,
+    Colors.yellow,
+  ];
+
+  Map<String, double> dataMap = new Map();
 
   final List<String> _list = [
     '0','SDk','plugin updates','Facebook','哔了狗了QP又不够了',
@@ -105,8 +115,19 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ]
     );
 
+
+    dataMap.putIfAbsent("Flutter", () => 5);
+    dataMap.putIfAbsent("React", () => 3);
+    dataMap.putIfAbsent("Xamarin", () => 2);
+    dataMap.putIfAbsent("Ionic", () => 2);
   }
 
+
+  void togglePieChart() {
+    setState(() {
+      toggle = !toggle;
+    });
+  }
 
   @override
   Widget build(BuildContext context)
@@ -227,7 +248,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     child: RaisedButton(
                         child: Text('Analyse'),
                         onPressed: (){
-                          DataSearch.analyzeArticles(_inputTags);
+                          //DataSearch.analyzeArticles(_inputTags);
+                          togglePieChart();
                         }
                     ),
                   ),
@@ -235,8 +257,30 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     padding: EdgeInsets.all(10),
                     child: Text(_inputOnPressed),
                   ),
+                  Container(
+                    child:
+                    Center(
+                      child : toggle ? PieChart(
+                      dataMap: dataMap,
+                      legendFontColor: Colors.blueGrey[900],
+                      legendFontSize: 14.0,
+                      legendFontWeight: FontWeight.w500,
+                      animationDuration: Duration(milliseconds: 800),
+                      chartLegendSpacing: 32.0,
+                      chartRadius: MediaQuery.of(context).size.width / 2.7,
+                      showChartValuesInPercentage: true,
+                      showChartValues: true,
+                      showChartValuesOutside: true,
+                      chartValuesColor: Colors.blueGrey[900].withOpacity(0.9),
+                      colorList: colorList,
+                      showLegends: true,
+                    )
+                        : Text("Show analysis of keywords here"),
+                  )
+                  )
                 ],
               ),
+
           )
     );
   }
