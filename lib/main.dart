@@ -122,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 1, vsync: this);
+//    _tabController = TabController(length: 1, vsync: this);
     _scrollViewController = ScrollController();
 
     int cnt = 0;
@@ -169,6 +169,18 @@ class _MyHomePageState extends State<MyHomePage>
   void processEmotions(var key, var value) {
     print("$value" + '$key');
     dataMap.putIfAbsent(key, () => value);
+  }
+
+  List<Widget> articleWidgets;
+
+  void setArticles(List<Article> articles){
+    for(Article a in articles){
+      articleWidgets.add(a.build(context));
+    }
+  }
+
+  bool areArtsInitialized(){
+    return articleWidgets == null;
   }
 
   @override
@@ -291,6 +303,7 @@ class _MyHomePageState extends State<MyHomePage>
                 child: Text('Analyse'),
                 onPressed: () async {
                   final data = await DataSearch.getNewsData(_inputTags);
+                  setArticles(data);
                   togglePieChart(data);
                 }),
           ),
@@ -326,6 +339,14 @@ class _MyHomePageState extends State<MyHomePage>
               textDirection: TextDirection.rtl,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: Center( 
+                child : toggle ?
+                ListView(children: articleWidgets)
+                    : Text("ARTICLEZ HERE")
             ),
           )
         ],
