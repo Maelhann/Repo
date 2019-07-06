@@ -140,9 +140,14 @@ class _MyHomePageState extends State<MyHomePage>
     _inputTags.addAll(['first tag']);
   }
 
+
+  List<Widget> widg;
+
   void togglePieChart(List<Article> articles) async {
     dataMap = new Map();
     String _corpus = "";
+    widg = articles;
+
     for (Article a in articles) {
       _corpus += "${a.snippet}";
     }
@@ -163,6 +168,7 @@ class _MyHomePageState extends State<MyHomePage>
         toggle = !toggle;
       }
     });
+
     initCounter(DataSearch.numRes);
   }
 
@@ -171,17 +177,6 @@ class _MyHomePageState extends State<MyHomePage>
     dataMap.putIfAbsent(key, () => value);
   }
 
-  List<Widget> articleWidgets;
-
-  void setArticles(List<Article> articles){
-    for(Article a in articles){
-      articleWidgets.add(a.build(context));
-    }
-  }
-
-  bool areArtsInitialized(){
-    return articleWidgets == null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -303,7 +298,6 @@ class _MyHomePageState extends State<MyHomePage>
                 child: Text('Analyse'),
                 onPressed: () async {
                   final data = await DataSearch.getNewsData(_inputTags);
-                  setArticles(data);
                   togglePieChart(data);
                 }),
           ),
@@ -345,7 +339,7 @@ class _MyHomePageState extends State<MyHomePage>
             margin: EdgeInsets.symmetric(vertical: 10),
             child: Center( 
                 child : toggle ?
-                ListView(children: articleWidgets)
+                ListView(children: widg )
                     : Text("ARTICLEZ HERE")
             ),
           )
