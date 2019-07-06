@@ -163,6 +163,9 @@ class _MyHomePageState extends State<MyHomePage>
     dataMap.putIfAbsent('fear', () => analysis.fear.intensity);
 
 
+    if(widg.isEmpty){
+      print("SALOPESALOPESALOPE");
+    }
     setState(() {
       if (!toggle) {
         toggle = !toggle;
@@ -339,7 +342,7 @@ class _MyHomePageState extends State<MyHomePage>
             margin: EdgeInsets.symmetric(vertical: 10),
             child: Center( 
                 child : toggle ?
-                ListView(children: widg )
+                ListView(children: widg, scrollDirection: Axis.vertical, shrinkWrap: true)
                     : Text("ARTICLEZ HERE")
             ),
           )
