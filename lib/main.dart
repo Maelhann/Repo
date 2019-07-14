@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   bool _withSuggesttions = false;
   int _count = 0;
   int _column = 8;
-  double _fontSize = 15;
+  double _fontSize = 19;
 
   String _selectableOnPressed = '';
   String _inputOnPressed = '';
@@ -305,8 +305,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     showLegends: true,
                   )
                 : Text(
-                    "Repo checks thousands of news outlets and analyzes what"
-                    "the public opinion of your tags.",
+                    "Repo scans thousands of news articles matching the tags you enter from a plethora of different outlets, "
+                        "and uses AI models and sentiment analysis to find out what "
+                    "the public opinion of your tags is. ",
                     textAlign: TextAlign.center),
           )),
           Container(
