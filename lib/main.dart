@@ -55,46 +55,16 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   Map<String, double> dataMap = new Map();
 
-  final List<String> _list = [
-    '0',
-    'SDk',
-    'plugin updates',
-    'Facebook',
-    '哔了狗了QP又不够了',
-    'Kirchhoff',
-    'Italy',
-    'France',
-    'Spain',
-    '美',
-    'Dart',
-    'Foo',
-    'Select',
-    'lorem ip',
-    '9',
-    'Star',
-    'Flutter Selectable Tags',
-    '1',
-    'Hubble',
-    '2',
-    'Input flutter tags',
-    'A B C',
-    '8',
-    'Android Studio developer',
-    'welcome to the jungle',
-    'Gauss',
-    '美术',
-    '互联网',
-    '炫舞时代',
-    '篝火营地',
-  ];
+  final List<String> _list = [];
 
   // TAG VARIABLES
+
   bool _symmetry = false;
   bool _singleItem = false;
   bool _withSuggesttions = false;
   int _count = 0;
   int _column = 8;
-  double _fontSize = 9;
+  double _fontSize = 15;
 
   String _selectableOnPressed = '';
   String _inputOnPressed = '';
@@ -195,24 +165,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               autofocus: false,
               placeholder: "Add tags",
 
-              suggestionsList: !_withSuggesttions
-                  ? null
-                  : [
-                      "One",
-                      "two",
-                      "android",
-                      "Dart",
-                      "flutter",
-                      "test",
-                      "tests",
-                      "androids",
-                      "androidsaaa",
-                      "Test",
-                      "suggest",
-                      "suggestions",
-                      "last",
-                      "lest"
-                    ],
+              suggestionsList: null,
 
               popupMenuBuilder: (String tag) {
                 return <PopupMenuEntry>[
