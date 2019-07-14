@@ -1,9 +1,10 @@
 import 'package:repo/sentAnalysis.dart';
 import 'package:repo/data_fetch.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 
-class Article extends StatelessWidget {
+class Article {
   final String content;
   final String dateTime;
   final String snippet;
@@ -34,8 +35,7 @@ class Article extends StatelessWidget {
         )
     );
   }
-
-
 }
+
 
 

@@ -36,19 +36,20 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
-    with TickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollViewController;
   bool toggle = false;
 
+
+
   List<Color> colorList = [
-    Colors.red,
-    Colors.green,
-    Colors.blue,
-    Colors.yellow,
-    Colors.purple,
-    Colors.deepOrangeAccent
+    Colors.yellowAccent,
+    Colors.redAccent,
+    Colors.purpleAccent,
+    Colors.blueAccent,
+    Colors.deepOrangeAccent,
+    Colors.greenAccent
   ];
 
   Map<String, double> dataMap = new Map();
@@ -92,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage>
   bool _withSuggesttions = false;
   int _count = 0;
   int _column = 8;
-  double _fontSize = 22;
+  double _fontSize = 9;
 
   String _selectableOnPressed = '';
   String _inputOnPressed = '';
@@ -109,20 +110,21 @@ class _MyHomePageState extends State<MyHomePage>
   void initCounter(num totalNumber) {
     _controller =
         AnimationController(duration: const Duration(seconds: 10), vsync: this);
-    animation = Tween<double>(begin: 0, end: totalNumber.toDouble()).animate(_controller)
-      ..addListener(() {
-        setState(() {
-          // The state that has changed here is the animation objects value
-          numRes = animation.value.toStringAsFixed(0);
-        });
-      });
+    animation = Tween<double>(begin: 0, end: totalNumber.toDouble())
+        .animate(_controller)
+          ..addListener(() {
+            setState(() {
+              // The state that has changed here is the animation objects value
+              numRes = animation.value.toStringAsFixed(0);
+            });
+          });
     _controller.forward();
   }
 
   @override
   void initState() {
     super.initState();
-//    _tabController = TabController(length: 1, vsync: this);
+
     _scrollViewController = ScrollController();
 
     int cnt = 0;
@@ -140,13 +142,9 @@ class _MyHomePageState extends State<MyHomePage>
     _inputTags.addAll(['first tag']);
   }
 
-
-  List<Widget> widg;
-
   void togglePieChart(List<Article> articles) async {
     dataMap = new Map();
     String _corpus = "";
-    widg = articles;
 
     for (Article a in articles) {
       _corpus += "${a.snippet}";
@@ -162,10 +160,6 @@ class _MyHomePageState extends State<MyHomePage>
     dataMap.putIfAbsent('confidence', () => analysis.confident.intensity);
     dataMap.putIfAbsent('fear', () => analysis.fear.intensity);
 
-
-    if(widg.isEmpty){
-      print("SALOPESALOPESALOPE");
-    }
     setState(() {
       if (!toggle) {
         toggle = !toggle;
@@ -180,26 +174,10 @@ class _MyHomePageState extends State<MyHomePage>
     dataMap.putIfAbsent(key, () => value);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: NestedScrollView(
-      controller: _scrollViewController,
-      headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
-        return <Widget>[
-          SliverAppBar(
-            title: Text("Repo"),
-            centerTitle: true,
-            pinned: true,
-            backgroundColor: Colors.purple,
-            expandedHeight: 110.0,
-            floating: true,
-            forceElevated: boxIsScrolled,
-          )
-        ];
-      },
-      body: ListView(
+        body: ListView(
         children: <Widget>[
           Padding(
             padding: EdgeInsets.all(10),
@@ -210,8 +188,8 @@ class _MyHomePageState extends State<MyHomePage>
               columns: _column,
               fontSize: _fontSize,
               symmetry: _symmetry,
-              color: Colors.deepPurpleAccent,
-              iconBackground: Colors.deepPurpleAccent,
+              color: Colors.blueGrey,
+              iconBackground: Colors.blueGrey,
               lowerCase: false,
               autofocus: false,
               placeholder: "Add tags",
@@ -301,6 +279,7 @@ class _MyHomePageState extends State<MyHomePage>
                 child: Text('Analyse'),
                 onPressed: () async {
                   final data = await DataSearch.getNewsData(_inputTags);
+                  print('${data.length}');
                   togglePieChart(data);
                 }),
           ),
@@ -326,8 +305,10 @@ class _MyHomePageState extends State<MyHomePage>
                     colorList: colorList,
                     showLegends: true,
                   )
-                : Text("Repo checks thousands of news outlets and analyzes what"
-                "the public opinion of your tags.",textAlign: TextAlign.center ),
+                : Text(
+                    "Repo checks thousands of news outlets and analyzes what"
+                    "the public opinion of your tags.",
+                    textAlign: TextAlign.center),
           )),
           Container(
             margin: EdgeInsets.symmetric(vertical: 10),
@@ -338,27 +319,32 @@ class _MyHomePageState extends State<MyHomePage>
               textAlign: TextAlign.center,
             ),
           ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 10),
-            child: Center( 
-                child : toggle ?
-                ListView(children: widg, scrollDirection: Axis.vertical, shrinkWrap: true)
-                    : Text("ARTICLEZ HERE")
-            ),
-          )
         ],
       ),
-    ));
+    );
   }
 
   ///Random Colors
   Color _color = Color(0xFFFFFFFF);
   final Random _random = Random();
 
+//  List<Widget> getArticlesWidgets(List<Article> articles){
+//      List<Widget> widgs = new List<Widget>();
+//      for(Article a in articles){
+//        print("ahahahahah");
+//        widgs.add(new ListTile(
+//          title: Text(a.title),
+//          subtitle: Text(a.author),
+//        ));
+//      }
+//
+//      articleWidgets = widgs;
+//
+//  }
+
   Color _randomColor() {
     _color = Color.fromARGB(_random.nextInt(256), _random.nextInt(256),
         _random.nextInt(256), _random.nextInt(256));
     return _color;
   }
-
 }
