@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       cnt++;
     });
 
-    _inputTags.addAll(['first tag']);
+    _inputTags.addAll(['example']);
   }
 
   void togglePieChart(List<Article> articles) async {
@@ -148,10 +148,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[100],
         body: ListView(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(50),
           ),
           Container(
             child: InputTags(
@@ -159,8 +160,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               columns: _column,
               fontSize: _fontSize,
               symmetry: _symmetry,
-              color: Colors.blueGrey,
-              iconBackground: Colors.blueGrey,
+              color: Colors.blue[300],
+              iconBackground: Colors.blue[150],
               lowerCase: false,
               autofocus: false,
               placeholder: "Add tags",
@@ -229,13 +230,57 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           ),
           Padding(
             padding: EdgeInsets.all(10),
-            child: RaisedButton(
-                child: Text('Analyse'),
-                onPressed: () async {
+            child:
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              LikeButton(
+              size: 100.0,
+              onTap:  (bool isLiked) async {
                   final data = await DataSearch.getNewsData(_inputTags);
                   print('${data.length}');
                   togglePieChart(data);
-                }),
+                  return true;
+                },
+
+              circleColor:
+              CircleColor(start: Color(0xff669900), end: Color(0xff669900)),
+              bubblesColor: BubblesColor(
+                dotPrimaryColor: Color(0xff669900),
+                dotSecondaryColor: Color(0xff99cc00),
+              ),
+              likeBuilder: (bool isTapped) {
+                return Icon(
+                  Icons.filter_drama,
+                  color: isTapped ? Colors.green : Colors.grey,
+                  size: 100.0,
+                );
+              },
+
+              likeCountAnimationType: LikeCountAnimationType.all,
+              countBuilder: (int count, bool isLiked, String text) {
+                var color = isLiked ? Colors.green : Colors.grey;
+                Widget result;
+                if (count == 0) {
+                  result = Text(
+                    "love",
+                    style: TextStyle(color: color),
+                  );
+                } else
+                  result = Text(
+                    text,
+                    style: TextStyle(color: color),
+                  );
+                return result;
+              },
+              likeCountPadding: EdgeInsets.only(left: 15.0),
+            ),
+              Padding(
+                padding: EdgeInsets.all(20.0),
+                child:  Text('Tap to scan'),
+              )
+            ]),
+
           ),
           Padding(
             padding: EdgeInsets.all(10),
@@ -265,7 +310,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     textAlign: TextAlign.center),
           )),
           Container(
-            margin: EdgeInsets.symmetric(vertical: 10),
+            margin: EdgeInsets.symmetric(vertical: 50),
             child: Text(
               'number of sources analyzed : $numRes',
               textDirection: TextDirection.rtl,
