@@ -1,5 +1,8 @@
 import 'package:repo/sentAnalysis.dart';
 import 'package:repo/data_fetch.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
 
 class Article {
   final String content;
@@ -13,7 +16,7 @@ class Article {
   Article(this.content, this.dateTime, this.snippet, this.source, this.title,
       this.author);
 
-  static Article articleFromJson(Map<String, dynamic> articleData){
+  static Article articleFromJson(Map<String, dynamic> articleData) {
     String content = articleData['content'];
     String date = articleData['publishedAt'];
     String snippet = articleData['description'];
@@ -23,9 +26,16 @@ class Article {
     return new Article(content, date, snippet, source, title, author);
   }
 
-
-
-
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(padding:
+        const EdgeInsets.all(16.0),
+            child: Text(title, style: TextStyle(fontSize: 22.0))
+        )
+    );
+  }
 }
+
 
 

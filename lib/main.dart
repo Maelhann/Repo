@@ -11,6 +11,7 @@ import 'package:repo/newsJson.dart';
 import 'dart:math';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:repo/sentAnalysis.dart';
+import 'package:like_button/like_button.dart';
 
 void main() => runApp(MyApp());
 
@@ -36,63 +37,34 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
-    with TickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollViewController;
   bool toggle = false;
 
+
+
   List<Color> colorList = [
-    Colors.red,
-    Colors.green,
-    Colors.blue,
-    Colors.yellow,
-    Colors.purple,
-    Colors.deepOrangeAccent
+    Colors.yellowAccent,
+    Colors.redAccent,
+    Colors.purpleAccent,
+    Colors.blueAccent,
+    Colors.deepOrangeAccent,
+    Colors.greenAccent
   ];
 
   Map<String, double> dataMap = new Map();
 
-  final List<String> _list = [
-    '0',
-    'SDk',
-    'plugin updates',
-    'Facebook',
-    '哔了狗了QP又不够了',
-    'Kirchhoff',
-    'Italy',
-    'France',
-    'Spain',
-    '美',
-    'Dart',
-    'Foo',
-    'Select',
-    'lorem ip',
-    '9',
-    'Star',
-    'Flutter Selectable Tags',
-    '1',
-    'Hubble',
-    '2',
-    'Input flutter tags',
-    'A B C',
-    '8',
-    'Android Studio developer',
-    'welcome to the jungle',
-    'Gauss',
-    '美术',
-    '互联网',
-    '炫舞时代',
-    '篝火营地',
-  ];
+  final List<String> _list = [];
 
   // TAG VARIABLES
+
   bool _symmetry = false;
   bool _singleItem = false;
   bool _withSuggesttions = false;
   int _count = 0;
   int _column = 8;
-  double _fontSize = 22;
+  double _fontSize = 19;
 
   String _selectableOnPressed = '';
   String _inputOnPressed = '';
@@ -109,20 +81,21 @@ class _MyHomePageState extends State<MyHomePage>
   void initCounter(num totalNumber) {
     _controller =
         AnimationController(duration: const Duration(seconds: 10), vsync: this);
-    animation = Tween<double>(begin: 0, end: totalNumber.toDouble()).animate(_controller)
-      ..addListener(() {
-        setState(() {
-          // The state that has changed here is the animation objects value
-          numRes = animation.value.toStringAsFixed(0);
-        });
-      });
+    animation = Tween<double>(begin: 0, end: totalNumber.toDouble())
+        .animate(_controller)
+          ..addListener(() {
+            setState(() {
+              // The state that has changed here is the animation objects value
+              numRes = animation.value.toStringAsFixed(0);
+            });
+          });
     _controller.forward();
   }
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 1, vsync: this);
+
     _scrollViewController = ScrollController();
 
     int cnt = 0;
@@ -137,12 +110,13 @@ class _MyHomePageState extends State<MyHomePage>
       cnt++;
     });
 
-    _inputTags.addAll(['first tag']);
+    _inputTags.addAll(['example']);
   }
 
   void togglePieChart(List<Article> articles) async {
     dataMap = new Map();
     String _corpus = "";
+
     for (Article a in articles) {
       _corpus += "${a.snippet}";
     }
@@ -157,12 +131,12 @@ class _MyHomePageState extends State<MyHomePage>
     dataMap.putIfAbsent('confidence', () => analysis.confident.intensity);
     dataMap.putIfAbsent('fear', () => analysis.fear.intensity);
 
-
     setState(() {
       if (!toggle) {
         toggle = !toggle;
       }
     });
+
     initCounter(DataSearch.numRes);
   }
 
@@ -174,25 +148,11 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: NestedScrollView(
-      controller: _scrollViewController,
-      headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
-        return <Widget>[
-          SliverAppBar(
-            title: Text("Repo"),
-            centerTitle: true,
-            pinned: true,
-            backgroundColor: Colors.purple,
-            expandedHeight: 110.0,
-            floating: true,
-            forceElevated: boxIsScrolled,
-          )
-        ];
-      },
-      body: ListView(
+      backgroundColor: Colors.blue[100],
+        body: ListView(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(50),
           ),
           Container(
             child: InputTags(
@@ -200,30 +160,13 @@ class _MyHomePageState extends State<MyHomePage>
               columns: _column,
               fontSize: _fontSize,
               symmetry: _symmetry,
-              color: Colors.deepPurpleAccent,
-              iconBackground: Colors.deepPurpleAccent,
+              color: Colors.blue[300],
+              iconBackground: Colors.blue[150],
               lowerCase: false,
               autofocus: false,
               placeholder: "Add tags",
 
-              suggestionsList: !_withSuggesttions
-                  ? null
-                  : [
-                      "One",
-                      "two",
-                      "android",
-                      "Dart",
-                      "flutter",
-                      "test",
-                      "tests",
-                      "androids",
-                      "androidsaaa",
-                      "Test",
-                      "suggest",
-                      "suggestions",
-                      "last",
-                      "lest"
-                    ],
+              suggestionsList: null,
 
               popupMenuBuilder: (String tag) {
                 return <PopupMenuEntry>[
@@ -287,12 +230,57 @@ class _MyHomePageState extends State<MyHomePage>
           ),
           Padding(
             padding: EdgeInsets.all(10),
-            child: RaisedButton(
-                child: Text('Analyse'),
-                onPressed: () async {
+            child:
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              LikeButton(
+              size: 100.0,
+              onTap:  (bool isLiked) async {
                   final data = await DataSearch.getNewsData(_inputTags);
+                  print('${data.length}');
                   togglePieChart(data);
-                }),
+                  return true;
+                },
+
+              circleColor:
+              CircleColor(start: Color(0xff669900), end: Color(0xff669900)),
+              bubblesColor: BubblesColor(
+                dotPrimaryColor: Color(0xff669900),
+                dotSecondaryColor: Color(0xff99cc00),
+              ),
+              likeBuilder: (bool isTapped) {
+                return Icon(
+                  Icons.filter_drama,
+                  color: isTapped ? Colors.green : Colors.grey,
+                  size: 100.0,
+                );
+              },
+
+              likeCountAnimationType: LikeCountAnimationType.all,
+              countBuilder: (int count, bool isLiked, String text) {
+                var color = isLiked ? Colors.green : Colors.grey;
+                Widget result;
+                if (count == 0) {
+                  result = Text(
+                    "love",
+                    style: TextStyle(color: color),
+                  );
+                } else
+                  result = Text(
+                    text,
+                    style: TextStyle(color: color),
+                  );
+                return result;
+              },
+              likeCountPadding: EdgeInsets.only(left: 15.0),
+            ),
+              Padding(
+                padding: EdgeInsets.all(20.0),
+                child:  Text('Tap to scan'),
+              )
+            ]),
+
           ),
           Padding(
             padding: EdgeInsets.all(10),
@@ -316,31 +304,47 @@ class _MyHomePageState extends State<MyHomePage>
                     colorList: colorList,
                     showLegends: true,
                   )
-                : Text("Repo checks thousands of news outlets and analyzes what"
-                "the public opinion of your tags.",textAlign: TextAlign.center ),
+                : Text(
+                    "Repo scans thousands of news articles matching the tags you enter from a plethora of different outlets, "
+                        "and uses AI models and sentiment analysis to find out what "
+                    "the public opinion of your tags is. ",
+                    textAlign: TextAlign.center),
           )),
           Container(
-            margin: EdgeInsets.symmetric(vertical: 10),
+            margin: EdgeInsets.symmetric(vertical: 50),
             child: Text(
               'number of sources analyzed : $numRes',
               textDirection: TextDirection.rtl,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-          )
+          ),
         ],
       ),
-    ));
+    );
   }
 
   ///Random Colors
   Color _color = Color(0xFFFFFFFF);
   final Random _random = Random();
 
+//  List<Widget> getArticlesWidgets(List<Article> articles){
+//      List<Widget> widgs = new List<Widget>();
+//      for(Article a in articles){
+//        print("ahahahahah");
+//        widgs.add(new ListTile(
+//          title: Text(a.title),
+//          subtitle: Text(a.author),
+//        ));
+//      }
+//
+//      articleWidgets = widgs;
+//
+//  }
+
   Color _randomColor() {
     _color = Color.fromARGB(_random.nextInt(256), _random.nextInt(256),
         _random.nextInt(256), _random.nextInt(256));
     return _color;
   }
-
 }

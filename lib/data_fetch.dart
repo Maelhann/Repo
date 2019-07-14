@@ -7,7 +7,6 @@ import 'dart:io';
 import 'dart:core';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:repo/newsJson.dart';
 import 'package:repo/sentAnalysis.dart';
 
