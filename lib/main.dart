@@ -11,6 +11,7 @@ import 'package:repo/newsJson.dart';
 import 'dart:math';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:repo/sentAnalysis.dart';
+import 'package:like_button/like_button.dart';
 
 void main() => runApp(MyApp());
 
